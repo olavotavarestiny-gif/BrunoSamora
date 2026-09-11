@@ -1,0 +1,30 @@
+{
+  "tool": "built-in imagegen",
+  "images": [
+    {
+      "name": "gender",
+      "prompt": "Use case: photorealistic-natural. Asset type: photograph for a Portuguese fitness quiz for Angolan adults. Create one independent landscape 3:2 photograph, premium natural editorial photography, realistic skin texture and ordinary unretouched physiques. Clean bright environments with cohesive white and red palette. Medium-wide composition with all heads fully visible, subjects centered with generous space around them for responsive cropping. Respectful, welcoming, aspirational, never body-shaming or before/after. No text, no logos, no watermarks, no collage. Ordinary Black African man age 35 with average build and Black African woman age 40 with fuller build standing together comfortably in a white studio with subtle red architecture. Casual red and white sports clothing, friendly natural expressions, soft daylight. Both people have equal visual prominence.",
+      "path": "public/images/01-genero.webp"
+    },
+    {
+      "name": "location",
+      "prompt": "Use case: photorealistic-natural. Asset type: photograph for a Portuguese fitness quiz for Angolan adults. Create one independent landscape 3:2 photograph, premium natural editorial photography, realistic skin texture and ordinary unretouched physiques. Clean bright environments with cohesive white and red palette. Medium-wide composition with all heads fully visible, subjects centered with generous space around them for responsive cropping. Respectful, welcoming, aspirational, never body-shaming or before/after. No text, no logos, no watermarks, no collage. Busy Black African professional woman age 35 wearing a red blouse and a Black African man age 50 in a white casual business shirt walking together outside a modern Luanda-inspired office. Contemporary white modern architecture, understated red accent, natural tropical daylight. No identifiable or fabricated landmarks. Candid approachable ordinary adults.",
+      "path": "public/images/02-localizacao.webp"
+    },
+    {
+      "name": "body",
+      "prompt": "Use case: photorealistic-natural. Asset type: photograph for a Portuguese fitness quiz for Angolan adults. Create one independent landscape 3:2 photograph, premium natural editorial photography, realistic skin texture and ordinary unretouched physiques. Clean bright environments with cohesive white and red palette. Medium-wide composition with all heads fully visible, subjects centered with generous space around them for responsive cropping. Respectful, welcoming, aspirational, never body-shaming or before/after. No text, no logos, no watermarks, no collage. Three ordinary Black African adults standing relaxed together in a light white studio: a slender man age 25, a plus-size woman age 40, and an average-build older man age 60. Casual red and white sports clothes. Equal dignity and visual prominence, warm natural smiles, subtle red architectural accents, soft natural lighting.",
+      "path": "public/images/03-corpo.webp"
+    },
+    {
+      "name": "goals",
+      "prompt": "Use case: photorealistic-natural. Asset type: photograph for a Portuguese fitness quiz for Angolan adults. Create one independent landscape 3:2 photograph, premium natural editorial photography, realistic skin texture and ordinary unretouched physiques. Clean bright environments with cohesive white and red palette. Medium-wide composition with all heads fully visible, subjects centered with generous space around them for responsive cropping. Respectful, welcoming, aspirational, never body-shaming or before/after. No text, no logos, no watermarks, no collage. A Black African plus-size woman age 45 and a Black African slender male beginner age 30 enjoying gentle light dumbbell exercise together in a bright white gym with restrained red accents. Ordinary physiques, modest casual red and white sports clothing. Each person holding small light dumbbells naturally, anatomically correct hands, friendly smiles, soft window daylight, beginner-friendly atmosphere.",
+      "path": "public/images/04-objetivos.webp"
+    },
+    {
+      "name": "barriers",
+      "prompt": "Use case: photorealistic-natural. Asset type: photograph for a Portuguese fitness quiz for Angolan adults. Create one independent landscape 3:2 photograph, premium natural editorial photography, realistic skin texture and ordinary unretouched physiques. Clean bright environments with cohesive white and red palette. Medium-wide composition with all heads fully visible, subjects centered with generous space around them for responsive cropping. Respectful, welcoming, aspirational, never body-shaming or before/after. No text, no logos, no watermarks, no collage. A Black African older woman age 55 and an average-build Black African man age 40 sitting on a gym bench smiling supportively together before beginning exercise. A subtle gym bag beside the bench, bright clean gym with white walls and restrained red accents. Modest red and white sports clothing, ordinary physiques and natural skin texture, warm beginner-friendly mood, soft window light.",
+      "path": "public/images/05-barreiras.webp"
+    }
+  ]
+}
