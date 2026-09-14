@@ -3,9 +3,10 @@ import assert from 'node:assert/strict';
 import { validateLead, answerOptions } from '../supabase/functions/fit90-leads/validation.ts';
 import { handleLead } from '../supabase/functions/fit90-leads/handler.ts';
 import { POST } from '../app/api/leads/route.ts';
+import { plans, frequencyOptions, recommendPlan } from '../supabase/functions/_shared/fit90.ts';
 import { questions } from '../app/quiz-data.ts';
 
-const valid = () => ({ id: crypto.randomUUID(), name: ' Teste Fit 90 ', phone: '923 000 000', email: 'TEST@example.com', answers: answerOptions.map(o => o[0]), consent: true });
+const valid = () => ({ id: crypto.randomUUID(), name: ' Teste Fit 90 ', phone: '923 000 000', email: 'TEST@example.com', answers: answerOptions.map(o => o[0]), consent: true, selected_plan: 'light' });
 const config = { url: 'https://example.supabase.co', serviceKey: 'server-only-test' };
 const request = (data: unknown) => new Request('https://example.com/leads', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
 
@@ -65,4 +66,32 @@ test('site fails closed when unconfigured and rejects cross-origin requests', as
     if (previousUrl !== undefined) process.env.SUPABASE_URL = previousUrl;
     if (previousKey !== undefined) process.env.SUPABASE_ANON_KEY = previousKey;
   }
+});
+
+
+test('four frequencies recommend the right plan; every alternative remains selectable', () => {
+  const expected = ['light', 'performance', 'gold', 'gold'];
+  for (let i = 0; i < frequencyOptions.length; i++) {
+    assert.equal(recommendPlan(frequencyOptions[i]), expected[i]);
+    for (const plan of plans) {
+      const input = valid();
+      input.answers[5] = frequencyOptions[i];
+      const lead = validateLead({ ...input, selected_plan: plan.id, recommended_plan: 'fake', selected_price_kz: 1 });
+      assert.equal(lead.recommended_plan, expected[i]);
+      assert.equal(lead.selected_plan, plan.id);
+      assert.equal(lead.selected_price_kz, plan.price);
+      assert.equal(lead.training_frequency, frequencyOptions[i]);
+    }
+  }
+  assert.equal(recommendPlan('invalid'), null);
+});
+test('new submissions require a valid plan and frequency, legacy submissions remain accepted', () => {
+  for (const selected_plan of [undefined, '', 'cademy', 'premium', 42]) assert.throws(() => validateLead({ ...valid(), selected_plan }));
+  const invalid = valid(); invalid.answers[5] = '7';
+  assert.throws(() => validateLead(invalid));
+  const legacy = validateLead({ ...valid(), answers: valid().answers.slice(0, 5), selected_plan: undefined });
+  assert.equal(legacy.training_frequency, null);
+  assert.equal(legacy.selected_plan, null);
+  assert.equal(legacy.selected_price_kz, null);
+  assert.throws(() => validateLead({ ...valid(), answers: valid().answers.slice(0, 5) }));
 });

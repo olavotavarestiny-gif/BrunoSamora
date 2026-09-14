@@ -8,27 +8,29 @@ O backend está instalado na organização **Bruno Samora**:
 - [Contactos — Table Editor](https://supabase.com/dashboard/project/fslrkrhuatzfqxbzilnd/editor), tabela `fit90_leads`.
 - [Edge Function fit90-leads](https://supabase.com/dashboard/project/fslrkrhuatzfqxbzilnd/functions).
 - [Repositório privado](https://github.com/olavotavarestiny-gif/BrunoSamora).
-- Migração aplicada: `20260914145325_fit90_leads.sql`.
+- Migrações aplicadas: `20260914145325_fit90_leads.sql` e `20260914220051_fit90_three_plans.sql`.
 
 A gravação e a repetição do mesmo pedido foram verificadas na cloud: apenas uma linha foi criada. A leitura com chave anónima foi recusada. O KUKUGEST-CRM não foi alterado. O aviso informativo “RLS Enabled No Policy” é intencional: apenas o backend privilegiado acede à tabela; não criar políticas públicas para o remover.
 
 ## Fluxo
 
-1. O visitante responde às cinco perguntas, indica nome/WhatsApp, e-mail opcional e autoriza o armazenamento e contacto.
-2. A landing envia `POST /api/leads` no próprio domínio.
-3. O servidor encaminha para a Edge Function `fit90-leads`, com a chave `anon` JWT.
-4. A função valida os valores e chama `submit_fit90_lead` no Supabase.
-5. A tabela `public.fit90_leads` guarda o contacto. Só após confirmação da base de dados a página apresenta o Fit 90.
-6. O backend do CRM consulta os contactos pendentes e confirma a importação na tabela.
+1. O visitante responde às seis perguntas, incluindo a frequência de treino.
+2. A landing apresenta sempre Light Fit 90 (199.000 Kz), Performance Fit 90 (249.000 Kz) e Gold Fit 90 (289.000 Kz).
+3. A frequência recomenda Light para 2 vezes, Performance para 3 vezes e Gold para 4+ vezes ou liberdade de horários. O visitante pode escolher outro plano.
+4. Após escolher, indica nome/WhatsApp, e-mail opcional e autoriza o armazenamento e contacto. Nada é gravado só por ver os planos.
+5. `POST /api/leads` encaminha para a Edge Function `fit90-leads`, que valida os valores e chama `submit_fit90_lead`.
+6. A tabela `public.fit90_leads` guarda o contacto, as respostas, o plano recomendado, o escolhido e o preço. Só depois da confirmação é apresentado o sucesso.
+7. O CRM importa os contactos pendentes e confirma a sincronização.
 
-Todas as localizações recebem Fit 90. A localização continua a ser recolhida como contexto para a equipa, sem encaminhar para treino à distância. Preços de outros planos foram retirados; nenhum preço novo foi presumido. O botão de resultado explica os próximos passos; não processa pagamentos nem envia WhatsApp automaticamente.
+Todos os contactos continuam associados ao programa `fit90`. A localização serve apenas de contexto; não existe encaminhamento para treino à distância. O preço guardado é o valor apresentado no momento da captação, não um pagamento. O site não processa reservas, pagamentos ou mensagens automáticas.
+
 
 ## Executar localmente ou instalar noutro ambiente
 
 No projeto acima, a estrutura já foi aplicada: **não executar novamente o SQL inicial**. Para um ambiente novo, seguir os passos abaixo.
 
 1. Criar/selecionar o projeto da equipa Bruno Samora.
-2. Aplicar a migração versionada em `supabase/migrations/20260914145325_fit90_leads.sql` usando o fluxo Supabase CLI da equipa. `supabase/schema.sql` é uma cópia de referência para leitura; não aplicar ambos. Alterações futuras devem acrescentar migrações.
+2. Aplicar as migrações versionadas em `supabase/migrations/`, por ordem de nome usando o fluxo Supabase CLI da equipa. `supabase/schema.sql` é apenas uma cópia de referência do esquema inicial v1; não aplicar ambos. Alterações futuras devem acrescentar migrações.
 3. Publicar `supabase/functions/fit90-leads` mantendo **Verify JWT ligado**, conforme `supabase/config.toml`. A função usa `SUPABASE_URL` e `SUPABASE_SERVICE_ROLE_KEY`, disponibilizadas pelo runtime Supabase. Não colocar a chave privilegiada no site.
 4. Copiar `.env.example` para `.env.local` e preencher `SUPABASE_URL` e `SUPABASE_ANON_KEY` do projeto. A chave deve ser a **legacy anon JWT**, porque o gateway verifica JWTs; uma chave `sb_publishable_...` não serve para esta configuração. Estas variáveis são lidas no servidor da landing.
 5. Configurar as mesmas duas variáveis no ambiente de produção do site. No Sites, usar as variáveis de runtime da plataforma. Publicar depois de aplicar as variáveis.
@@ -51,9 +53,11 @@ O projeto não precisa de buckets, contas para visitantes ou de um servidor adic
     "Não, estou longe de Talatona",
     "Quero reduzir peso",
     "Perder gordura",
-    "Falta de tempo"
+    "Falta de tempo",
+    "3 vezes por semana"
   ],
-  "consent": true
+  "consent": true,
+  "selected_plan": "performance"
 }
 ```
 
@@ -63,6 +67,10 @@ Erros: `400` validação/JSON; `403` origem não permitida no servidor do site; 
 
 Os números de nove dígitos recebem o indicativo `+244`; números internacionais devem incluir o indicativo. As respostas permitidas estão em `validation.ts` e são comparadas com o contrato do frontend nos testes. `program`, `source`, datas de consentimento e estado inicial são definidos no backend/base de dados, não pelo visitante.
 
+Novos pedidos exigem seis respostas e `selected_plan` válido. `recommended_plan` e `selected_price_kz` enviados pelo cliente são ignorados: a recomendação e o preço são calculados no backend. Não presumir que o plano escolhido é sempre o recomendado.
+
+Por compatibilidade com páginas antigas ainda abertas, pedidos de cinco respostas sem plano continuam aceites, com os quatro campos novos nulos. Contactos históricos não são alterados nem recebem recomendações inventadas.
+
 ## Tabela e ligação ao CRM
 
 | Campo | Uso |
@@ -70,8 +78,12 @@ Os números de nove dígitos recebem o indicativo `+244`; números internacionai
 | `id` | UUID estável; chave de deduplicação na importação |
 | `program` | Sempre `fit90` |
 | `name`, `phone`, `email` | Contactos; e-mail pode ser nulo |
-| `answers` | JSON com `gender`, `location`, `current_shape`, `goal`, `barrier` |
-| `consent_at`, `consent_version` | Data no servidor e versão `fit90-contact-v1` |
+| `answers` | JSON com `gender`, `location`, `current_shape`, `goal`, `barrier`, `training_frequency` |
+| `consent_at`, `consent_version` | Data no servidor e versão `fit90-contact-v2` para o novo fluxo (v1 nos contactos antigos) |
+| `training_frequency` | Resposta textual à sexta pergunta |
+| `recommended_plan` | `light`, `performance` ou `gold`, calculado pela frequência |
+| `selected_plan` | Plano escolhido pelo visitante; pode diferir do recomendado |
+| `selected_price_kz` | Inteiro: `199000`, `249000` ou `289000`; calculado pelo servidor e pela base de dados |
 | `source` | `bruno_samora_landing` |
 | `status` | `new`, `contacted`, `qualified`, `converted`, `lost` |
 | `crm_external_id` | Identificador atribuído pelo CRM |
@@ -119,8 +131,8 @@ Convidar os devs através das definições de equipa da organização Supabase, 
 
 ## Validação e limites
 
-- Build de produção e verificação TypeScript.
-- Testes automatizados de validação, contratos do quiz, erros de base de dados, limites de pedidos e ausência de configuração.
+- Build de produção, verificação TypeScript e logotipo original preservado byte a byte.
+- Testes automatizados de validação, quatro recomendações, 12 combinações frequência/plano, preço não manipulável pelo cliente, compatibilidade v1 e erros de envio.
 - SQL executado em PostgreSQL local via PGlite: gravação, idempotência, limite por telefone, atualização CRM e acesso público bloqueado.
 - Teste **na cloud** concluído: envio `201`, retry idempotente com uma linha e leitura pública recusada (`401`).
 - O limite por telefone é básico e não impede bots que alternem números. Antes de uma campanha aberta com tráfego elevado, a equipa pode adicionar CAPTCHA e limites por IP no gateway.

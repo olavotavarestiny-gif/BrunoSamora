@@ -1,6 +1,6 @@
 # Bruno Samora — Fit 90
 
-Landing page com quiz de cinco perguntas e captação de contactos para o Fit 90. A localização não altera o programa. O backend valida os dados, guarda-os no Supabase e permite que o CRM importe os contactos pela Data API.
+Landing page com quiz de seis perguntas e captação de contactos para o Fit 90. A localização não altera o programa. A frequência recomenda Light (199.000 Kz), Performance (249.000 Kz) ou Gold (289.000 Kz); o visitante pode escolher qualquer plano. O backend valida os dados, guarda-os no Supabase e permite que o CRM importe os contactos pela Data API.
 
 **Supabase ativo:** organização **Bruno Samora**, projeto `fslrkrhuatzfqxbzilnd`. Tabela e função publicadas; gravação, idempotência e bloqueio de leitura pública verificados na cloud. O KUKUGEST-CRM não foi alterado.
 
@@ -31,7 +31,8 @@ Ler [docs/INTEGRACAO-CRM.md](docs/INTEGRACAO-CRM.md): instalação, contrato HTT
 
 - `app/api/leads/route.ts`: endpoint do site.
 - `supabase/functions/fit90-leads/`: função de validação e gravação.
-- `supabase/schema.sql`: tabela, permissões, índices e função de gravação.
+- `supabase/migrations/`: histórico completo da tabela, permissões e função de gravação.
+- `supabase/functions/_shared/fit90.ts`: planos, preços e recomendação partilhados com o frontend.
 - `.env.example`: configuração sem segredos.
 
 A fotografia de Bruno foi fornecida pelo cliente. As cinco fotografias do quiz foram geradas por IA; prompts em `image-prompts.json`. O site não processa pagamentos, reservas ou mensagens automáticas.

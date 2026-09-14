@@ -5,6 +5,7 @@ export type LeadSubmission = {
   email: string;
   answers: string[];
   consent: boolean;
+  selected_plan: 'light' | 'performance' | 'gold';
 };
 
 export async function submitLead(lead: LeadSubmission): Promise<void> {
