@@ -5,5 +5,4 @@ export const questions = [
  {title:'Que resultado queres alcançar?', options:['Perder gordura','Ganhar massa muscular','Ter mais energia e saúde','Sentir-me melhor no meu corpo'], image:'04-objetivos.webp', alt:'Uma mulher e um homem negros a praticar exercício leve num ginásio luminoso.'},
  {title:'O que mais te impede?', options:['Falta de tempo','Não sei por onde começar','Tenho vergonha de começar','Já tentei e não consegui'], image:'05-barreiras.webp', alt:'Duas pessoas negras sentadas num banco de ginásio, num momento de apoio e confiança.'},
 ];
-export function recommendedPlan(answers: string[]) { return answers[1]===questions[1].options[2]?'Cademy':'Plano Evolução'; }
 export function validPhone(phone:string){return /^\+?[\d\s()-]+$/.test(phone) && phone.replace(/\D/g,'').length>=9 && phone.replace(/\D/g,'').length<=15;}

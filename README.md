@@ -1,21 +1,37 @@
-# Bruno Samora — Protótipo de diagnóstico
+# Bruno Samora — Fit 90
 
-Quiz visual mobile-first em português de Angola. Cinco perguntas ilustradas com fotografias criadas por IA, contactos opcionais no protótipo (nome e WhatsApp exigidos para avançar), análise simulada e recomendação do Plano Evolução ou Cademy consoante a proximidade de Talatona.
+Landing page com quiz de cinco perguntas e captação de contactos para o Fit 90. A localização não altera o programa. O backend valida os dados, guarda-os no Supabase e permite que o CRM importe os contactos pela Data API.
 
-## Executar
+**Supabase ativo:** organização **Bruno Samora**, projeto `fslrkrhuatzfqxbzilnd`. Tabela e função publicadas; gravação, idempotência e bloqueio de leitura pública verificados na cloud. O KUKUGEST-CRM não foi alterado.
 
-`npm install` e `npm run dev`. Produção: `npm run build`.
+- [Ver contactos no Supabase](https://supabase.com/dashboard/project/fslrkrhuatzfqxbzilnd/editor)
+- [Código no GitHub](https://github.com/olavotavarestiny-gif/BrunoSamora)
+- [Landing page](https://bruno-samora-diagnostico.olavotavarestiny.chatgpt.site) — acesso privado, gerido no Sites.
 
-## Limites do protótipo
+## Desenvolvimento
 
-Os contactos ficam apenas na memória da página e não são enviados ou guardados. Os botões de adesão mostram uma mensagem de demonstração. Não há pagamento, reserva, inscrição nem envio de WhatsApp. Para lançamento real, ligar os contactos e as adesões ao destino comercial definido pelo proprietário.
+```sh
+npm ci
+cp .env.example .env.local
+# Preencher as variáveis do projeto Supabase dedicado.
+npm run dev
+```
 
-Os preços e o selo promocional são os fornecidos no briefing. A recomendação é determinada pela resposta de localização; as restantes respostas servem para demonstrar o percurso visual.
+```sh
+node --test tests/leads.test.ts
+npx tsc --noEmit
+npm run build
+```
 
-## Recursos
+Node.js 22.13+ (testes com remoção nativa de tipos; validados em Node 24).
 
-Fotografia de Bruno fornecida na pasta original Imagens. As cinco fotografias do quiz foram geradas pelo imagegen integrado; os prompts completos e caminhos estão em image-prompts.json. Imagens optimizadas em public/images.
+## Entrega aos devs
 
-## Validação
+Ler [docs/INTEGRACAO-CRM.md](docs/INTEGRACAO-CRM.md): instalação, contrato HTTP, campos da base de dados, exemplo de importação idempotente e instruções de acesso à equipa.
 
-Build de produção e TypeScript sem erros; verificados os três ramos de localização e entradas válidas/inválidas de telefone. Não foi solicitado teste de interface no navegador. O início do quiz é exposto opcionalmente via WebMCP quando suportado; não havia contexto WebMCP disponível para validar esse contrato.
+- `app/api/leads/route.ts`: endpoint do site.
+- `supabase/functions/fit90-leads/`: função de validação e gravação.
+- `supabase/schema.sql`: tabela, permissões, índices e função de gravação.
+- `.env.example`: configuração sem segredos.
+
+A fotografia de Bruno foi fornecida pelo cliente. As cinco fotografias do quiz foram geradas por IA; prompts em `image-prompts.json`. O site não processa pagamentos, reservas ou mensagens automáticas.
