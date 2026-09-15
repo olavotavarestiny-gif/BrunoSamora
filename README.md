@@ -27,6 +27,8 @@ Node.js 22.13+ (testes com remoção nativa de tipos; validados em Node 24).
 
 ## Entrega aos devs
 
+[Integração do gateway de pagamento](docs/INTEGRACAO-PAGAMENTOS.md): fluxo e contrato propostos para implementação pela equipa. O pagamento ainda não está integrado.
+
 Ler [docs/INTEGRACAO-CRM.md](docs/INTEGRACAO-CRM.md): instalação, contrato HTTP, campos da base de dados, exemplo de importação idempotente e instruções de acesso à equipa.
 
 - `app/api/leads/route.ts`: endpoint do site.

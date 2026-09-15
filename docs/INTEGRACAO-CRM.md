@@ -139,3 +139,7 @@ Convidar os devs através das definições de equipa da organização Supabase, 
 - O consentimento refere-se apenas ao armazenamento e contacto sobre Fit 90. Definir com o responsável pelo projeto o prazo de retenção e o processo de eliminação também no CRM.
 
 Referências oficiais: [Edge Function auth](https://supabase.com/docs/guides/functions/auth-headers), [proteção da Data API](https://supabase.com/docs/guides/api/securing-your-api), [gestão de acessos da equipa](https://supabase.com/docs/guides/platform/access-control).
+
+## Próxima etapa: pagamento
+
+A equipa irá integrar o gateway depois da seleção do plano e recolha do contacto. Ver [INTEGRACAO-PAGAMENTOS.md](INTEGRACAO-PAGAMENTOS.md) para os pontos de integração, contrato proposto, confirmação no backend e atualização do CRM. Os campos e endpoints de pagamento descritos nesse documento ainda não estão implementados.
