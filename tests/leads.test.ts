@@ -95,3 +95,54 @@ test('new submissions require a valid plan and frequency, legacy submissions rem
   assert.equal(legacy.selected_price_kz, null);
   assert.throws(() => validateLead({ ...valid(), answers: valid().answers.slice(0, 5) }));
 });
+
+function crmConfig() {
+  const base = config as typeof config & { crmUrl?: string; crmApiKey?: string };
+  return { ...base, crmUrl: 'https://crm.example.com', crmApiKey: 'secret-crm-key' };
+}
+
+test('after saving, pushes the lead to the CRM without client status and acks with crm_external_id', async () => {
+  const calls: { url: string; headers?: HeadersInit; body?: string }[] = [];
+  const crmLeadId = crypto.randomUUID();
+  const input = valid();
+  const response = await handleLead(request(input), crmConfig(), async (url, init) => {
+    const u = typeof url === 'string' ? url : (url instanceof URL ? url.href : (url as Request).url);
+    calls.push({ url: u, headers: init?.headers, body: typeof init?.body === 'string' ? init.body : undefined });
+    if (u.includes('/rpc/submit_fit90_lead')) return Response.json(input.id);
+    if (u.includes('/api/v1/leads')) return Response.json({ data: { id: crmLeadId } });
+    return Response.json({}, { status: 204 });
+  });
+  assert.equal(response.status, 201);
+  const push = calls.find(c => c.url.includes('/api/v1/leads'));
+  const ack = calls.find(c => c.url.includes('/rest/v1/fit90_leads'));
+  if (!push?.body || !push.headers || !ack) throw new Error('expected a CRM push, a Supabase ack and payloads');
+  assert.equal((push.headers as Record<string, string>)['X-API-Key'], 'secret-crm-key');
+  const body = JSON.parse(push.body) as Record<string, unknown>;
+  assert.equal(body.externalId, input.id);
+  assert.equal(body.name, 'Teste Fit 90');
+  assert.equal(body.phone, '+244923000000');
+  assert.equal(body.estimatedValue, 199000);
+  assert.equal(body.status, undefined);
+  assert.equal(body.program, undefined);
+  assert.equal(body.source, 'bruno_samora_landing');
+  assert.ok(ack.url.includes(`id=eq.${input.id}`));
+  if (!ack.body) throw new Error('expected an ack payload');
+  const ackBody = JSON.parse(ack.body) as Record<string, unknown>;
+  assert.equal(ackBody.crm_external_id, crmLeadId);
+  assert.equal(typeof ackBody.crm_synced_at, 'string');
+});
+
+test('a CRM outage never fails the saved lead nor leaks internal details', async () => {
+  const input = valid();
+  let patched = false;
+  const response = await handleLead(request(input), crmConfig(), async (url) => {
+    const u = typeof url === 'string' ? url : (url instanceof URL ? url.href : (url as Request).url);
+    if (u.includes('/rpc/submit_fit90_lead')) return Response.json(input.id);
+    if (u.includes('/api/v1/leads')) throw new Error('secret crm api key leaked');
+    patched = true;
+    return Response.json({}, { status: 204 });
+  });
+  assert.equal(response.status, 201);
+  assert.equal(patched, false, 'CRM failure must not mark the row as synced');
+  assert.doesNotMatch(await response.text(), /secret/);
+});
