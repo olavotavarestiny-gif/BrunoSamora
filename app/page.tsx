@@ -9,6 +9,8 @@ import { plans, recommendPlan, getPlan, type PlanId } from '../supabase/function
 import { submitLead } from '@/lib/leads-client';
 
 type Screen = 'intro' | 'quiz' | 'analysis' | 'result' | 'contact' | 'success';
+const TRANSFER_IBAN = '1:000x0000XXXX0X0X0X';
+const TRANSFER_BENEFICIARY = 'Grupo Samora';
 function Logo({ className = '' }: { className?: string }) {
  return <img className={className} src="/images/samorafit-studio-logo.webp" alt="SamoraFit Studio" width={2731} height={578}/>;
 }
@@ -156,7 +158,7 @@ export default function Home() {
     </fieldset></form>
    </section>
   </main>}
-  {screen === 'success' && chosen && <main className="success-screen enter"><span className="small-icon"><Check size={25}/></span><span className="eyebrow">PEDIDO RECEBIDO</span><h1 ref={heading} tabIndex={-1}>O teu próximo passo:<br/><em>{chosen.name}.</em></h1><p>A equipa vai contactar-te sobre o plano de {chosen.priceLabel} Kz.</p><button className="restart" onClick={restart}><RotateCcw size={15}/>Novo diagnóstico</button></main>}
+  {screen === 'success' && chosen && <main className="success-screen enter"><span className="small-icon"><Check size={25}/></span><span className="eyebrow">PEDIDO RECEBIDO</span><h1 ref={heading} tabIndex={-1}>O teu próximo passo:<br/><em>{chosen.name}.</em></h1><p>A equipa vai contactar-te sobre o plano de {chosen.priceLabel} Kz.</p><div className="transfer-box"><span className="eyebrow">PAGAMENTO POR TRANSFERÊNCIA</span><dl><div><dt>Plano</dt><dd>{chosen.name}</dd></div><div><dt>Valor</dt><dd>{chosen.priceLabel} Kz</dd></div><div><dt>IBAN</dt><dd>{TRANSFER_IBAN}</dd></div><div><dt>Beneficiário</dt><dd>{TRANSFER_BENEFICIARY}</dd></div></dl><p className="transfer-note">Depois da transferência, dirige-te ao ginásio para confirmares a transferência e o cadastro.</p></div><button className="restart" onClick={restart}><RotateCcw size={15}/>Novo diagnóstico</button></main>}
   <Dialog open={dialog} onOpenChange={setDialog}><DialogContent className="prototype-dialog" showCloseButton={false}><span className="small-icon"><Check size={25}/></span><DialogTitle>Escolha guardada: {chosen?.name}</DialogTitle><DialogDescription>Recebemos o teu contacto, as respostas e o plano escolhido. A equipa Bruno Samora vai contactar-te. Este pedido não constitui uma reserva ou pagamento.</DialogDescription><DialogClose className="primary">Concluir<Check size={18}/></DialogClose></DialogContent></Dialog>
  </div>;
 }
