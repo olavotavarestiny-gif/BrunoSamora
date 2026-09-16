@@ -5,6 +5,6 @@ export const questions = [
  {title:'Como está o teu corpo hoje?', options:['Quero reduzir peso','Sou magro/a e quero ganhar corpo','Quero melhorar a minha forma','Estou a recomeçar'], image:'03-corpo.webp', alt:'Três pessoas negras de diferentes idades e corpos, com roupa desportiva.'},
  {title:'Que resultado queres alcançar?', options:['Perder gordura','Ganhar massa muscular','Ter mais energia e saúde','Sentir-me melhor no meu corpo'], image:'04-objetivos.webp', alt:'Uma mulher e um homem negros a praticar exercício leve num ginásio luminoso.'},
  {title:'O que mais te impede?', options:['Falta de tempo','Não sei por onde começar','Tenho vergonha de começar','Já tentei e não consegui'], image:'05-barreiras.webp', alt:'Duas pessoas negras sentadas num banco de ginásio, num momento de apoio e confiança.'},
- {title:'Quantas vezes por semana pretende treinar?', options:frequencyOptions, image:'bruno.jpeg', alt:'Bruno Samora, treinador do programa Fit 90.'},
+ {title:'Quantas vezes por semana pretende treinar?', options:frequencyOptions, image:'bruno-fit90-hero.jpg', alt:'Bruno Samora, treinador do programa Fit 90.'},
 ];
 export function validPhone(phone:string){return /^\+?[\d\s()-]+$/.test(phone) && phone.replace(/\D/g,'').length>=9 && phone.replace(/\D/g,'').length<=15;}

@@ -10,7 +10,7 @@ import { submitLead } from '@/lib/leads-client';
 
 type Screen = 'intro' | 'quiz' | 'analysis' | 'result' | 'contact' | 'success';
 function Logo({ className = '' }: { className?: string }) {
- return <img className={className} src="/images/logotipo.jpeg" alt="SamoraFit Workout" width={1600} height={536}/>;
+ return <img className={className} src="/images/samorafit-studio-logo.webp" alt="SamoraFit Studio" width={2731} height={578}/>;
 }
 export default function Home() {
  const [screen, setScreen] = useState<Screen>('intro');
@@ -103,13 +103,13 @@ export default function Home() {
  }
  return <div className={`site screen-${screen}`}>
   <header className="header">
-   <a className="brand" href="/" aria-label="SamoraFit Workout, início"><Logo className="brand-logo"/></a>
+   <a className="brand" href="/" aria-label="SamoraFit Studio, início"><Logo className="brand-logo"/></a>
    {screen === 'intro' ? <span className="header-mark" aria-hidden="true"><i/><i/><i/></span> : <span className="header-caption">FIT 90 · O TEU RITMO</span>}
   </header>
   {screen === 'intro' && <>
    <main className="hero enter">
     <section className="hero-copy"><span className="eyebrow">TRÊS PLANOS. UM NOVO COMEÇO.</span><h1>O teu próximo passo é o <em>Fit 90.</em></h1><p>Responde a 6 perguntas rápidas e descobre o plano que acompanha o teu ritmo.</p><button className="primary" onClick={() => setScreen('quiz')}>Encontrar o meu plano<ArrowRight size={21}/></button></section>
-    <figure className="hero-photo"><div className="photo-red"/><img className="trainer-photo" src="/images/bruno.jpeg" alt="Bruno Samora numa pose de força" fetchPriority="high"/><span className="photo-outline" aria-hidden="true"/><span className="photo-arrow" aria-hidden="true"><ArrowUpRight/></span><div className="photo-brand"><Logo/></div></figure>
+    <figure className="hero-photo"><div className="photo-red"/><img className="trainer-photo" src="/images/bruno-fit90-hero.jpg" alt="Bruno Samora com camisola vermelha SamoraFit e um haltere" width={5760} height={3840} fetchPriority="high"/><span className="photo-outline" aria-hidden="true"/><span className="photo-arrow" aria-hidden="true"><ArrowUpRight/></span><div className="photo-brand"><Logo/></div></figure>
    </main>
    <div className="hero-bottom" aria-hidden="true"><span className="mini-line"/><div className="step-dots"><b/><i/><i/><i/><i/><i/></div><span className="mini-line"/></div>
   </>}
