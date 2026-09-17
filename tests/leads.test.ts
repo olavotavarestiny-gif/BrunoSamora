@@ -124,7 +124,7 @@ test('after saving, pushes the lead to the CRM without client status and acks wi
   assert.equal(body.estimatedValue, 199000);
   assert.equal(body.status, undefined);
   assert.equal(body.program, undefined);
-  assert.equal(body.source, 'bruno_samora_landing');
+  assert.equal(body.source, 'fit90_landing');
   assert.ok(ack.url.includes(`id=eq.${input.id}`));
   if (!ack.body) throw new Error('expected an ack payload');
   const ackBody = JSON.parse(ack.body) as Record<string, unknown>;

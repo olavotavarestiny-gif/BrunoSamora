@@ -8,7 +8,7 @@ create table public.fit90_leads (
   phone text not null check (phone ~ '^\+[0-9]{9,15}$'),
   email text check (email is null or char_length(email) <= 254),
   answers jsonb not null check (jsonb_typeof(answers) = 'object'),
-  source text not null default 'bruno_samora_landing' check (source = 'bruno_samora_landing'),
+  source text not null default 'fit90_landing' check (source = 'fit90_landing'),
   consent_version text not null default 'fit90-contact-v1',
   consent_at timestamptz not null default now(),
   status text not null default 'new' check (status in ('new','contacted','qualified','converted','lost')),

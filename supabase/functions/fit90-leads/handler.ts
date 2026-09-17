@@ -13,7 +13,7 @@ function crmLeadPayload(lead: ReturnType<typeof validateLead>, id: string): Reco
     phone: lead.phone,
     email: lead.email ?? undefined,
     company: 'Bruno Samora',
-    source: 'bruno_samora_landing',
+    source: 'fit90_landing',
     estimatedValue: lead.selected_price_kz ?? undefined,
     notes: notes || undefined,
   };
