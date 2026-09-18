@@ -35,6 +35,7 @@ export default function Home() {
  const recommended = recommendPlan(answers[5]);
  const chosen = getPlan(selectedPlan);
  const recommendation = getPlan(recommended);
+ const displayPlans = [getPlan('gold'), getPlan('performance'), getPlan('light')].filter((plan): plan is NonNullable<typeof plan> => Boolean(plan));
  const state = useRef({ screen, step, answers });
  state.current = { screen, step, answers };
 
@@ -127,22 +128,30 @@ export default function Home() {
   {screen === 'result' && <main className="plans-result enter">
    <div className="flow-top"><button className="back" onClick={() => { setStep(questions.length - 1); setScreen('quiz'); }}><ArrowLeft size={17}/>Alterar frequência</button><span>ESCOLHE O TEU FIT 90</span></div>
    <div className="plans-heading"><span className="eyebrow">À MEDIDA DO TEU RITMO</span><h1 ref={heading} tabIndex={-1}>O teu objetivo.<br className="mobile-break"/> <em>O teu Fit 90.</em></h1><p>Três formas de começar. A escolha é tua.</p></div>
-   <div className="recommendation-summary"><Sparkles size={20}/><p>Para o ritmo que escolheste, recomendamos <strong>{recommendation?.name}</strong>.</p></div>
+   <div className="recommendation-summary"><Sparkles size={20}/><p>Para o ritmo que escolheste, recomendamos <strong>{recommendation?.name}</strong>. Compara as três experiências.</p></div>
+   <div className="plans-quick-compare" aria-label="Comparação rápida dos planos">
+    <div><span>Light</span><strong>2 treinos/semana</strong></div>
+    <div><span>Performance</span><strong>3 treinos/semana</strong></div>
+    <div className="quick-gold"><span>Gold</span><strong>Livre Trânsito</strong></div>
+    <p><span>Performance</span><ArrowRight size={15}/><span>Gold</span><strong>apenas +30.000 Kz</strong></p>
+   </div>
    <div className="plans-grid" aria-label="Comparação dos três planos Fit 90">
-    {plans.map(plan => {
+    {displayPlans.map(plan => {
      const isRecommended = plan.id === recommended;
      return <article key={plan.id} className={`offer-card offer-${plan.id} ${isRecommended ? 'is-recommended' : ''}`} aria-labelledby={`plan-${plan.id}`}>
-      <div className="plan-badges">{plan.id === 'performance' && <span className="popular-badge">Mais Recomendado</span>}{isRecommended && <span className="personal-badge"><Check size={14}/>Recomendado para si</span>}</div>
+      <div className="plan-badges">{plan.id === 'gold' && <span className="value-badge"><Crown size={14}/>Melhor custo-benefício</span>}{isRecommended && <span className="personal-badge"><Check size={14}/>Indicado para o teu ritmo</span>}</div>
       <div className="offer-tier">{plan.id === 'gold' && <Crown size={16}/>}<span>{plan.tier}</span></div>
       <h2 id={`plan-${plan.id}`}>{plan.name}</h2>
       <p className="offer-tagline">{plan.description}</p>
       <p className="offer-price">{plan.priceLabel}<span> Kz</span></p>
+      {plan.id === 'gold' && <p className="gold-upgrade">+30.000 Kz para ter <strong>Livre Trânsito</strong></p>}
       <div className="offer-details"><p className="offer-frequency"><Check size={18}/>{plan.frequency}</p><p>{plan.detail}</p></div>
-      <button className={`plan-cta ${isRecommended ? 'recommended-cta' : ''}`} onClick={() => selectPlan(plan.id)}>Escolher {plan.name.replace(' Fit 90', '')}<ArrowUpRight size={19}/></button>
+      <div className="evolution"><div className="evolution-copy"><span>Potencial de evolução</span><strong>{plan.evolutionLabel}</strong></div><span className="evolution-meter" role="img" aria-label={`${plan.evolutionLevel} de 5 níveis de potencial de evolução`}>{[1, 2, 3, 4, 5].map(level => <i key={level} className={level <= plan.evolutionLevel ? 'filled' : ''}/>)}</span></div>
+      <button className={`plan-cta ${plan.id === 'gold' ? 'gold-cta' : ''}`} onClick={() => selectPlan(plan.id)}>{plan.cta}<ArrowUpRight size={19}/></button>
      </article>;
     })}
    </div>
-   <p className="choice-note">A recomendação acompanha a tua frequência. Podes escolher qualquer um dos três planos.</p>
+   <p className="choice-note">Os resultados dependem da frequência, consistência, alimentação e cumprimento do programa.</p>
    <button className="restart" onClick={restart}><RotateCcw size={15}/>Refazer diagnóstico</button>
   </main>}
   {screen === 'contact' && chosen && <main className="flow">

@@ -1,6 +1,6 @@
 # Bruno Samora — Fit 90
 
-Landing page com quiz de seis perguntas e captação de contactos para o Fit 90. A localização não altera o programa. A frequência recomenda Light (199.000 Kz), Performance (249.000 Kz) ou Gold (289.000 Kz); o visitante pode escolher qualquer plano. O backend valida os dados, guarda-os no Supabase e permite que o CRM importe os contactos pela Data API.
+Landing page com quiz de seis perguntas e captação de contactos para o Fit 90. A localização não altera o programa. A frequência recomenda Light (199.000 Kz), Performance (249.000 Kz) ou Gold (279.000 Kz); o visitante pode escolher qualquer plano. O backend valida os dados, guarda-os no Supabase e permite que o CRM importe os contactos pela Data API.
 
 **Supabase ativo:** organização **Bruno Samora**, projeto `fslrkrhuatzfqxbzilnd`. Tabela e função publicadas; gravação, idempotência e bloqueio de leitura pública verificados na cloud. O KUKUGEST-CRM não foi alterado.
 

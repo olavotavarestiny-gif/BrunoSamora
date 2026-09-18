@@ -15,7 +15,7 @@ A gravação e a repetição do mesmo pedido foram verificadas na cloud: apenas 
 ## Fluxo
 
 1. O visitante responde às seis perguntas, incluindo a frequência de treino.
-2. A landing apresenta sempre Light Fit 90 (199.000 Kz), Performance Fit 90 (249.000 Kz) e Gold Fit 90 (289.000 Kz).
+2. A landing apresenta sempre Light Fit 90 (199.000 Kz), Performance Fit 90 (249.000 Kz) e Gold Fit 90 (279.000 Kz).
 3. A frequência recomenda Light para 2 vezes, Performance para 3 vezes e Gold para 4+ vezes ou liberdade de horários. O visitante pode escolher outro plano.
 4. Após escolher, indica nome/WhatsApp, e-mail opcional e autoriza o armazenamento e contacto. Nada é gravado só por ver os planos.
 5. `POST /api/leads` encaminha para a Edge Function `fit90-leads`, que valida os valores e chama `submit_fit90_lead`.
@@ -83,7 +83,7 @@ Por compatibilidade com páginas antigas ainda abertas, pedidos de cinco respost
 | `training_frequency` | Resposta textual à sexta pergunta |
 | `recommended_plan` | `light`, `performance` ou `gold`, calculado pela frequência |
 | `selected_plan` | Plano escolhido pelo visitante; pode diferir do recomendado |
-| `selected_price_kz` | Inteiro: `199000`, `249000` ou `289000`; calculado pelo servidor e pela base de dados |
+| `selected_price_kz` | Inteiro: `199000`, `249000` ou `279000`; calculado pelo servidor e pela base de dados. Contactos Gold anteriores à alteração podem manter o valor histórico `289000`. |
 | `source` | `bruno_samora_landing` |
 | `status` | `new`, `contacted`, `qualified`, `converted`, `lost` |
 | `crm_external_id` | Identificador atribuído pelo CRM |

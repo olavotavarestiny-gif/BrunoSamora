@@ -19,7 +19,7 @@ Fluxo pretendido: **selecionar plano → preencher contacto → guardar o pedido
 | --- | --- | ---: |
 | `light` | Light Fit 90 | 199.000 |
 | `performance` | Performance Fit 90 | 249.000 |
-| `gold` | Gold Fit 90 | 289.000 |
+| `gold` | Gold Fit 90 | 279.000 |
 
 Moeda: `AOA`. O servidor deve determinar o preço a partir do catálogo, validar o plano e guardar uma cópia do valor na encomenda. Nunca cobrar um valor fornecido livremente pelo browser. O campo `selected_price_kz` do contacto é informativo e não prova pagamento. A conversão para a unidade exigida pelo gateway deve seguir a documentação do fornecedor escolhido.
 

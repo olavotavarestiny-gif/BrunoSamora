@@ -70,6 +70,7 @@ test('site fails closed when unconfigured and rejects cross-origin requests', as
 
 
 test('four frequencies recommend the right plan; every alternative remains selectable', () => {
+  assert.deepEqual(plans.map(plan => plan.price), [199000, 249000, 279000]);
   const expected = ['light', 'performance', 'gold', 'gold'];
   for (let i = 0; i < frequencyOptions.length; i++) {
     assert.equal(recommendPlan(frequencyOptions[i]), expected[i]);
