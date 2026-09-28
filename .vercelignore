@@ -1,0 +1,10 @@
+.env*
+.git
+.next
+.vinext
+dist
+.wrangler
+node_modules
+supabase/.temp
+tests
+*.tsbuildinfo
